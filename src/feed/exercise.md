@@ -32,10 +32,6 @@ Implement the components listed below. For each component, create a _Props_ type
     ```
 
     This component renders the _title_ prop with uppercase letters.
-    
-    Currently, if the _title_ prop is not provided (= _undefined_), an error will be thrown (you can see this by commenting out the line in `App.tsx` which randomly generates a title value). 
-
-    Add a check inside the component to prevent an error from being thrown, by displaying a fallback title instead, e.g, _No title_.
 
 *   OPTIONAL:
 
