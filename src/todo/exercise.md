@@ -177,6 +177,10 @@ type TodoProps = PropsWithChildren<{
   // Todo props...
 }>
 ```
+### Extra: glitz
+A library called [glitz](https://github.com/frenic/glitz) is used within Avensia for styling components (very similar to the styled-components library).
+
+Peruse glitz and determine what changes would be required to migrate from styled-components and accomplish the same styling. 
 
 ## Part 2: Component state and event handling
 In this part, the list of todos will be managed as component state (in _App_).
@@ -246,7 +250,110 @@ In order to create a todo with a user-entered title, the following must be imple
 *   Bind an event handler function to the `onClick` event on the _Checkbox_ styled component; the event handler should 
     invoke the `updateTodo` callback with the todo's id.
 
-### Extra: glitz
-A library called [glitz](https://github.com/frenic/glitz) is used within Avensia for styling components (very similar to the styled-components library).
+### Optional: Set document title
+As the user interacts with the list of todos, the number of uncompleted todos should be displayed in the document title.
 
-Peruse glitz and determine what changes would be required to migrate from styled-components and accomplish the same styling. 
+It's best practice to perform this type of calculation - a typical _side effect_ - in a `useEffect` callback, meaning the code will run __after__ the component has rendered . See the first code snippet [explaining effects in the React docs](https://reactjs.org/docs/hooks-overview.html#effect-hook) for how the hook `useEffect` may be utilized.
+
+Add a call to `useEffect` to the _App_ component that updates `document.title` with the number of uncompleted todos.
+
+> Hint: Try to use `array.reduce()` to calculate the uncompleted count!
+
+## Part 3: Data fetching
+Instead of embedding static (mock) todos as part of the application bundle, the _App_ component should fetch todos from a remote API.
+
+*   To differentiate between whether todos have been fetched or not, change the `useState` hook call for the todos to:
+
+    ```javascript
+    const [todos, setTodos] = useState<TodoType[] | undefined>()
+    ```
+
+    __Question__: Why is this better than simply having an empty array as the initial value?
+
+*   Update the `useEffect` for setting the document title - if no todos are yet available, display `Todos (N/A)`.
+
+*   Adjust the `createTodo`, `deleteTodo` and `updateTodo` functions to handle a possibly undefined array of todos.
+
+    __Hints__
+    
+    *   To spread a potentially undefined array, use `...(array ?? [])` (?? is the _nullish coalescing operator_).
+
+    *   To call a method on a potentially undefined array, use `array?.method()` (? allows for _optional chaining_).
+
+*   If the todos have not yet been fetched, _only_ display `Loading todos...` as the render output.
+
+*   Finally, add the following code to a `useEffect` callback:
+
+    ```javascript
+    const fetchTodos = async () => {
+      const response = await fetch('https://jsonplaceholder.typicode.com/todos');
+      const todos = await response.json();
+
+      setTodos(todos.map(
+        ({ userId, ...todo }: ({ userId: number } & TodoType)) => todo
+      ));
+    };
+
+    fetchTodos();
+    ```
+
+    __Important__: Ensure that the todos are only fetched once!
+
+### Optional: Fetching status 
+Fetching data typically involves a number of stages:
+
+*   `idle`
+
+    Data fetching has not yet begun.
+
+*   `loading`
+
+    Data fetching has begun.
+
+*   `success`
+
+    Data was fetched successfully.
+
+*   `failure`
+
+    An error occurred while fetching data.
+
+    __Hint__: To simulate a fetching error, change the URL to something invalid.
+
+A better way to differentiate whether or not data has been fetched, as well as to handle any errors, is to introduce state in the component which tracks these data fetching stages.
+
+*   Create a new type which is the union of the above stages.
+
+*   Add a state variable (suitably called _status_) with `useState` that is parameterized by the new type. Let the initial state be a status of `idle`.
+
+*   Add error handling to the data fetching code as follows:
+
+    ```javascript
+    try {
+      const response = await fetch('https://jsonplaceholder.typicode.com/todos');
+      const todos = await response.json();
+
+      setTodos(todos.map(
+        ({ userId, ...todo }: ({ userId: number } & TodoType)) => todo
+      ));
+    } catch (error) {
+      
+    }
+    ```
+
+    In the code above, update the status where appropriate to reflect the various data fetching stages.
+
+*   If the status is `idle`, return null as the render output.
+
+*   If the status is `loading`, return `Loading todos...` as the render output.
+
+*   If the status is `failure`, return a button "Retry" as the render output. When clicked, it should refetch the data.
+
+    __Hints__
+
+    *   In order for data fetching to be retried, the `useEffect` must add the status state variable as a dependency. 
+
+        Inside the `useEffect` callback, first check if the status is `idle`; if it's not, return immediately.
+
+    *   Set the status to the appropriate value when clicking the "Retry" button.
+
