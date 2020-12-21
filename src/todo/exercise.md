@@ -204,9 +204,12 @@ In order to create a todo with a user-entered title, the following must be imple
 
     ```javascript
     const createTodo = (title: string) => {
-      // update the state (= list of todos) by adding a new todo object - with the passed title - first in the list.
-      //
-      // Use Date.now() as the value for the 'id' property.
+      // update the state (= list of todos) by adding a new todo object - with the passed title - first in the list:
+      const newTodo = {
+        id: Date.now(),
+        completed: false,
+        title
+      };
       //
       // Important! You must update the state (= list of todos) as a completely NEW list of todos, containing the new todo object as the first element followed by all the elements of the current todos list.
       //
