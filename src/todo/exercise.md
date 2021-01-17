@@ -52,8 +52,6 @@ _Todo_ accepts the following (required) props:
 *   title: `string`
 *   completed: `boolean`
 
-> Hint: For props typing, use the `TodoType` from `types.ts`.
-
 It returns the following markup:
 
 ```html
@@ -235,7 +233,7 @@ In order to create a todo with a user-entered title, the following must be imple
 
 *   Pass this function as a prop to the _Todo_ component (and update the component's props typing).
 
-    > Hint: "Extend" `TodoType` by __intersecting__ it with the type `{ deleteTodo: (todoId: number) => void }`.
+    > Hint: "Extend" `TodoType` via __intersection__: `TodoType & { deleteTodo: (todoId: number) => void }`.
 
 *   Bind an event handler function to the `onClick` event on the _Button_ styled component; the event handler should invoke
     the `deleteTodo` callback with the todo's id.
