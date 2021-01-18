@@ -8,8 +8,6 @@ Implement the components listed below. For each component, create a _Props_ type
 
     Should render a _CardList_ component, passing a list of items as a prop.
 
-    (Use the _Item_ type from `types.ts`)
-
 *   `CardList.tsx`
 
     Should accept a list of items as a prop and render corresponding _Card_ components.
@@ -25,7 +23,7 @@ Implement the components listed below. For each component, create a _Props_ type
     Return the following markup from the _Card_ component:
 
     ```html
-    <div className="Card">
+    <div className="Card Card__medium">
       <p className="Card__title">{title.toUpperCase()}</p>
       <div><img className="Card__image" src={image} alt="" /></div>
     </div>
