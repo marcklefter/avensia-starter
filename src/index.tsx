@@ -5,9 +5,9 @@ import './index.css';
 
 // ...
 // Uncomment an example to run it.
-import { App } from './driver';
+// import { App } from './driver';
 // import { App } from './feed';
-// import { App } from './todo';
+import { App } from './todo';
 // import { App } from './useEffect';
 
 import reportWebVitals from './reportWebVitals';

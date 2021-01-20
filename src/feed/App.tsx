@@ -4,6 +4,10 @@ import {
   Item
 } from './types';
 
+import {
+  CardList
+} from './CardList';
+
 // ...
 
 const items: Item[] = [
@@ -18,5 +22,5 @@ const items: Item[] = [
 ];
 
 export const App = () => {
-  return null;
+  return <CardList items={items} />;
 }

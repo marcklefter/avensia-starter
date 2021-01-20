@@ -25,7 +25,7 @@ Implement the components listed below. For each component, create a _Props_ type
     Return the following markup from the _Card_ component:
 
     ```html
-    <div className="Card">
+    <div className="Card Card__medium">
       <p className="Card__title">{title.toUpperCase()}</p>
       <div><img className="Card__image" src={image} alt="" /></div>
     </div>
